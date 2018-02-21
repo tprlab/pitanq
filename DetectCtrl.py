@@ -37,6 +37,5 @@ if __name__ == '__main__':
     photos = P.get_list()
     if len(photos) > 0:
         p = photos[-1]
-        p = "floyd_1"
         rc = D.do_detect(p)
         print rc

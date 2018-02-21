@@ -41,7 +41,7 @@ def showPic(title, image):
 
 
 if __name__ == '__main__':
-    path = "floyd_1.JPG"
+    path = "test.jpg"
     cascade = "haarcascade_frontalcatface.xml"
     img, rects = handleFile(path, cascade)
     #print rects
