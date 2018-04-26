@@ -128,11 +128,11 @@ class PWM(object):
         '''Write data to I2C with self.address'''
         if self._DEBUG:
             print self._DEBUG_INFO, 'Writing value %2X to %2X' % (value, reg)
-        try:
-            self.bus.write_byte_data(self.address, reg, value)
-        except Exception, i:
-            print i
-            self._check_i2c()
+        #try:
+        self.bus.write_byte_data(self.address, reg, value)
+        #except Exception, i:
+        #    print i
+        #    self._check_i2c()
 
     def _read_byte_data(self, reg):
         '''Read data from I2C with self.address'''
@@ -183,8 +183,8 @@ class PWM(object):
         else:
             print "Device is missing."
             print "Check the address or wiring of PCA9685 servo driver, or email the error message to service@sunfounder.com"
-            print 'Exiting...'
-        quit()
+            #print 'Exiting...'
+        #quit()
 
     @property
     def frequency(self):

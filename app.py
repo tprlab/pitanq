@@ -96,14 +96,17 @@ def cam_right():
 def cam_left():
     return jsonify(app_ctrl.cam_left()), requests.codes.ok
 
-@app.route('/detect/<phid>', methods=['POST'])
-def detect(phid):
-    return jsonify({"rects" : app_ctrl.detect(phid)}), requests.codes.ok
+@app.route('/detect/haar/<phid>', methods=['POST'])
+def detect_haar(phid):
+    return jsonify({"rects" : app_ctrl.detect_haar(phid)}), requests.codes.ok
 
+@app.route('/detect/dnn/<phid>', methods=['POST'])
+def detect_dnn(phid):
+    return jsonify({"rs" : app_ctrl.detect_dnn(phid)}), requests.codes.ok
 
-
-
-
+@app.route('/dist', methods=['GET'])
+def dist():
+    return jsonify({"rs" : app_ctrl.dist()}), requests.codes.ok
 
 
 if __name__ == '__main__':

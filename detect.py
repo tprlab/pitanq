@@ -1,6 +1,7 @@
 import cv2
 import sys
 import os
+import logging
 
 #cascade = sys.argv[1]
 #path = sys.argv[2]
@@ -8,7 +9,7 @@ import os
 def handleFile(f, cascade):
     image = cv2.imread(f)
     if image is None:
-        print "File", f, "not found"
+        logging.debug("File %s not found" % f)
         return None, None
     rects = findObj(cascade, image)
 
@@ -25,6 +26,7 @@ def findObj(cascade, image):
     #detector = cv2.CascadeClassifier("haarcascade_frontalcatface.xml")
     detector = cv2.CascadeClassifier(cascade)
     if detector.empty():
+        logging.debug("No cascade loaded: " + cascade)
         return None
     rects = detector.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=10, minSize=(75, 75))
     return rects
@@ -41,7 +43,7 @@ def showPic(title, image):
 
 
 if __name__ == '__main__':
-    path = "test.jpg"
+    path = "floyd_1.JPG"
     cascade = "haarcascade_frontalcatface.xml"
     img, rects = handleFile(path, cascade)
     #print rects

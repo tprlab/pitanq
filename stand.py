@@ -4,6 +4,7 @@ import cam
 from datetime import datetime
 import logging
 import time
+import traceback
 
 
 
@@ -26,13 +27,18 @@ class StandCtrl:
     tilt_step = 30
 
     def __init__(self):
-        self.pwm = PCA9685.PWM()
-        self.pwm.frequency = 60
-        self.pwm.write(self.pan_ch, 0, self.pan)
-        self.pwm.write(self.tilt_ch, 0, self.tilt)    
+        try:
+            self.pwm = PCA9685.PWM()
+            self.pwm.frequency = 60
+            self.pwm.write(self.pan_ch, 0, self.pan)
+            self.pwm.write(self.tilt_ch, 0, self.tilt)    
+        except:
+            logging.debug("PWM disabled")
 
 
     def down(self):
+        if self.pwm is None:
+            return False
         if self.pan < servo_max:
             self.pan += self.pan_step
             self.pwm.write(self.pan_ch, 0, self.pan)
@@ -41,6 +47,9 @@ class StandCtrl:
         
 
     def up(self):
+        if self.pwm is None:
+            return False
+
         if self.pan > servo_min:
             self.pan -= self.pan_step
             self.pwm.write(self.pan_ch, 0, self.pan)
@@ -50,6 +59,9 @@ class StandCtrl:
 
 
     def left(self):
+        if self.pwm is None:
+            return False
+
         if self.tilt < servo_max:
             self.tilt += self.tilt_step
             self.pwm.write(self.tilt_ch, 0, self.tilt)
@@ -57,6 +69,9 @@ class StandCtrl:
         return False
 
     def right(self):
+        if self.pwm is None:
+            return False
+
         if self.tilt > servo_min:
             self.tilt -= self.tilt_step
             self.pwm.write(self.tilt_ch, 0, self.tilt)

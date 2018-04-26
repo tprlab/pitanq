@@ -1,7 +1,9 @@
 import MotorCtrl
 import PhotoCtrl
 import stand
-import DetectCtrl
+import HaarDetectCtrl
+import DnnDetectCtrl
+import DistCtrl
 
 import socket
 
@@ -11,13 +13,17 @@ class AppCtrl:
     motor_ctrl = None
     photo_ctrl = None
     stand_ctrl = None
-    detect_ctrl = None
+    haar_ctrl = None
+    dnn_ctrl = None
+    dist_ctrl = None
 
     def __init__(self):
         self.motor_ctrl = MotorCtrl.createMotorCtrl()
         self.photo_ctrl = PhotoCtrl.createPhotoCtrl()
         self.stand_ctrl = stand.createStandCtrl()
-        self.detect_ctrl = DetectCtrl.createDetectCtrl()
+        self.dist_ctrl = DistCtrl.createDistCtrl()
+        self.haar_ctrl = HaarDetectCtrl.createDetectCtrl()
+        self.dnn_ctrl = DnnDetectCtrl.createDetectCtrl()
 
 
 
@@ -82,8 +88,15 @@ class AppCtrl:
     def cam_right(self):
         return {"rc" : self.stand_ctrl.right()}
 
-    def detect(self, ph):
-        return self.detect_ctrl.do_detect(ph)
+    def detect_dnn(self, ph):
+        return self.dnn_ctrl.do_detect(ph)
+
+    def detect_haar(self, ph):
+        return self.haar_ctrl.do_detect(ph)
+    def dist(self):
+        return self.dist_ctrl.distance()
+
+
 
 
 

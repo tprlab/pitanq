@@ -4,11 +4,11 @@ import logging
 
  
 
-RF = 40
-RB = 38
+LF = 40
+LB = 38
 
-LF = 36
-LB = 32
+RF = 36
+RB = 32
 
 motors = [RF, RB, LF, LB]
 
@@ -128,15 +128,16 @@ def fwd_test(t):
 if __name__ == '__main__':    
     init()
     #run_motor(LB, 2) 
-    #forward(2)
+    forward(2)
     #right(2)
     #back(2)
     #right(3)
     #left(2)
     #stop()
+    #fwd_off()
 
     #back_test(2)
-    fwd_test(2)
+    #fwd_test(2)
     
      
     #GPIO.cleanup()

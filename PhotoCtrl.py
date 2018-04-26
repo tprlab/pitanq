@@ -40,6 +40,16 @@ class PhotoCtrl:
             if file.endswith(".jpg"):
                 ret.append(os.path.splitext(file)[0])
         return ret
+
+
+
+
+def get_root():
+    return PHOTO_PATH
+
+def set_root(path):
+    PHOTO_PATH = path
+
         
 
 
