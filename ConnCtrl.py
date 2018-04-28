@@ -4,7 +4,7 @@ import fcntl
 import struct
 
 
-ADDR_FILE = "/home/pi/host_hist.txt"
+ADDR_FILE = "/home/pi/pitanq/conf/host_hist.txt"
 
 
 def get_ip_address(ifname):

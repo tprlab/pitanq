@@ -3,8 +3,6 @@ import sys
 import os
 import logging
 
-#cascade = sys.argv[1]
-#path = sys.argv[2]
 
 def handleFile(f, cascade):
     image = cv2.imread(f)
@@ -15,15 +13,12 @@ def handleFile(f, cascade):
 
     print f, rects
     return image, rects
-    #if rects is not None:
-    #    drawRects(image, rects)
 
 
 
 def findObj(cascade, image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
  
-    #detector = cv2.CascadeClassifier("haarcascade_frontalcatface.xml")
     detector = cv2.CascadeClassifier(cascade)
     if detector.empty():
         logging.debug("No cascade loaded: " + cascade)
@@ -32,10 +27,9 @@ def findObj(cascade, image):
     return rects
 
 def drawRects(image, rects):
-
     for (i, (x, y, w, h)) in enumerate(rects):
         cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
-        #cv2.putText(image, "Cat #{}".format(i + 1), (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 0, 255), 2)
+
 
 def showPic(title, image):
     cv2.imshow(title, image)
@@ -43,10 +37,8 @@ def showPic(title, image):
 
 
 if __name__ == '__main__':
-    path = "floyd_1.JPG"
+    path = sys.argv[1]
     cascade = "haarcascade_frontalcatface.xml"
     img, rects = handleFile(path, cascade)
-    #print rects
-    #drawRects(img, rects)
-    #showPic("TestCV", img)
+    print rects
     

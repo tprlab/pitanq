@@ -3,10 +3,11 @@ import requests
 import logging
 import time
 import json
+import PiConf
 
 import AppCtrl
 
-logging.basicConfig(filename='/home/pi/robot.log',level=logging.DEBUG)
+logging.basicConfig(filename='/home/pi/pitanq/logs/robot.log',level=logging.DEBUG)
 
 app = Flask(__name__)
 app_ctrl = AppCtrl.createCtrl()
@@ -19,6 +20,11 @@ def index():
 @app.route('/ping', methods=['GET'])
 def ping():
     return jsonify(app_ctrl.ping()), requests.codes.ok
+
+@app.route('/version', methods=['GET'])
+def version():
+    return jsonify({"version" : PiConf.VERSION}), requests.codes.ok
+
 
 @app.route('/name', methods=['GET'])
 def name():

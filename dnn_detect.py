@@ -1,13 +1,13 @@
 import cv2 as cv
 import tf_labels
 import PiConf
+import sys
 
 
 def detectPic(img_path, thr=0.3):
     img = cv.imread(img_path)
     cvNet = cv.dnn.readNetFromTensorflow(PiConf.DNN_PATH, PiConf.DNN_TXT_PATH)
 
-    #img = cv.imread('270.jpg')
     rows = img.shape[0]
     cols = img.shape[1]
     cvNet.setInput(cv.dnn.blobFromImage(img, 1.0/127.5, (300, 300), (127.5, 127.5, 127.5), swapRB=True, crop=False))
@@ -31,13 +31,11 @@ def detectPic(img_path, thr=0.3):
             a["w"] = int(right - left)
             a["h"] = int(bottom - top)
             ret.append(a)
-            #print(tf_labels.getLabel(int(detection[1])), score, left, top, right, bottom)
-            #cv.rectangle(img, (int(left), int(top)), (int(right), int(bottom)), (23, 230, 210), thickness=2)
     print ret
     return img, ret
 
 
 if __name__ == '__main__':
 
-    d = detectPic('floyd_1.jpg')
+    d = detectPic(sys.argv[1])
     print d

@@ -9,8 +9,8 @@ import traceback
 
 
 
-servo_min = 150  # Min pulse length out of 4096
-servo_max = 600  # Max pulse length out of 4096
+servo_min = 150 
+servo_max = 600
 
 
 PAN_0 = 450
@@ -100,9 +100,4 @@ if __name__ == '__main__':
     time.sleep(1)
     print "Tilt-"
     stand.left()
-
-
-
-
-
 
