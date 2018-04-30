@@ -3,11 +3,17 @@ import requests
 import logging
 import time
 import json
-import PiConf
+import os
 
+import PiConf
 import AppCtrl
 
-logging.basicConfig(filename='/home/pi/pitanq/logs/robot.log',level=logging.DEBUG)
+
+if not os.path.isdir(PiConf.LOG_PATH):
+    os.makedirs(PiConf.LOG_PATH)        
+
+log_file = PiConf.LOG_PATH + "/" + PiConf.LOG_FILE
+logging.basicConfig(filename=log_file,level=logging.DEBUG)
 
 app = Flask(__name__)
 app_ctrl = AppCtrl.createCtrl()
