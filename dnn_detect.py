@@ -3,6 +3,7 @@ import tf_labels
 import PiConf
 import sys
 
+tf_labels.initLabels(PiConf.DNN_LABELS_PATH)
 
 def detectPic(img_path, thr=0.3):
     img = cv.imread(img_path)
