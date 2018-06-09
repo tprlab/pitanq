@@ -1,12 +1,13 @@
 import PhotoCtrl
 import dnn_detect
 import logging
+import PiConf
 
 class DnnDetectCtrl:
 
 
     def do_detect(self, img):
-        path = PhotoCtrl.PHOTO_PATH + "/" + img + ".jpg"
+        path = PiConf.PHOTO_PATH + "/" + img + ".jpg"
         pic, rects = dnn_detect.detectPic(path)
         logging.debug("Detected on" + img + ": " + str(rects))
         return rects
@@ -24,6 +25,6 @@ if __name__ == '__main__':
     photos = P.get_list()
     if len(photos) > 0:
         p = photos[-1]
-        p = "floyd_1"
+        print "Detecting photo", p
         rc = D.do_detect(p)
         print rc

@@ -21,7 +21,7 @@ class HaarDetectCtrl:
 
 
     def do_detect(self, img):
-        path = PhotoCtrl.PHOTO_PATH + "/" + img + ".jpg"
+        path = PiConf.PHOTO_PATH + "/" + img + ".jpg"
         pic, rects = detect.handleFile(path, self.cascade)
         logging.debug("Detected on" + img + ": " + str(rects))
         return self.structure(rects)
