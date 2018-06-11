@@ -4,6 +4,8 @@ import stand
 import HaarDetectCtrl
 import DnnDetectCtrl
 import DistCtrl
+import subprocess
+import PiConf
 
 import socket
 
@@ -97,7 +99,10 @@ class AppCtrl:
         return self.dist_ctrl.distance()
 
 
-
+    def update(self):
+        out = subprocess.Popen(["git", "pull"], cwd=PiConf.PITANQ_HOME, stdout=subprocess.PIPE)
+        for line in iter(out.stdout.readline,''):
+           print line.rstrip()
 
 
 def createCtrl():
@@ -105,7 +110,9 @@ def createCtrl():
 
 
 
-
+if __name__ == '__main__':
+    app = createCtrl()
+    print app.update()
 
 
     
