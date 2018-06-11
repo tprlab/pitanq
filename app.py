@@ -118,7 +118,7 @@ def detect_dnn(phid):
 
 @app.route('/update', methods=['POST'])
 def update():
-    return jsonify({"rs" : app_ctrl.update()}), requests.codes.ok
+    return jsonify(app_ctrl.update()), requests.codes.ok
 
 
 @app.route('/dist', methods=['GET'])

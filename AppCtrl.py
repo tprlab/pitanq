@@ -100,9 +100,11 @@ class AppCtrl:
 
 
     def update(self):
-        out = subprocess.Popen(["git", "pull"], cwd=PiConf.PITANQ_HOME, stdout=subprocess.PIPE)
-        for line in iter(out.stdout.readline,''):
-           print line.rstrip()
+        p = subprocess.Popen(["git", "pull"], cwd=PiConf.PITANQ_HOME, stdout=subprocess.PIPE)
+        out,err = p.communicate()
+        return {"rc" : p.returncode, "info":out}
+            
+
 
 
 def createCtrl():
