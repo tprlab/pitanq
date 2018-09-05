@@ -26,3 +26,4 @@ LOG_FILE = "robot.log"
 PITANQ_HOME = "/home/pi/pitanq"
 
 
+IMAGENET_MODEL_DIR = "/home/pi/imagenet"

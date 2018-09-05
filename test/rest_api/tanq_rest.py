@@ -3,7 +3,7 @@ import time
 import json
 
 
-URL = "http://0.0.0.0:5000"
+URL = "http://192.168.1.164:5000"
     
 def tanq_post(path, params = None):
     headers = {'Content-type': 'application/json'}
@@ -84,6 +84,8 @@ def ping():
 def dist():
     return tanq_get("/dist")
 
+def classify_tf(id):
+    return tanq_post("/classify/tf/" + id)
 
 
 
@@ -103,4 +105,4 @@ def get_photo(pid):
 
 
 if __name__ == '__main__':
-    print cam_left()
+    print classify_tf(sys.argv[1])

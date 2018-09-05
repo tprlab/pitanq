@@ -6,6 +6,7 @@ import DnnDetectCtrl
 import DistCtrl
 import subprocess
 import PiConf
+import ClassifyCtrl
 
 import socket
 
@@ -18,6 +19,7 @@ class AppCtrl:
     haar_ctrl = None
     dnn_ctrl = None
     dist_ctrl = None
+    class_ctrl = None
 
     def __init__(self):
         self.motor_ctrl = MotorCtrl.createMotorCtrl()
@@ -26,6 +28,7 @@ class AppCtrl:
         self.dist_ctrl = DistCtrl.createDistCtrl()
         self.haar_ctrl = HaarDetectCtrl.createDetectCtrl()
         self.dnn_ctrl = DnnDetectCtrl.createDetectCtrl()
+        self.class_ctrl = ClassifyCtrl.createClassifyCtrl()
 
 
 
@@ -104,7 +107,8 @@ class AppCtrl:
         out,err = p.communicate()
         return {"rc" : p.returncode, "info":out}
             
-
+    def classify(self, phid):
+        return self.class_ctrl.classify_photo(phid)
 
 
 def createCtrl():

@@ -116,6 +116,11 @@ def detect_haar(phid):
 def detect_dnn(phid):
     return jsonify({"rs" : app_ctrl.detect_dnn(phid)}), requests.codes.ok
 
+@app.route('/classify/tf/<phid>', methods=['POST'])
+def classify_tf(phid):
+    return jsonify({"rs" : app_ctrl.classify(phid)}), requests.codes.ok
+
+
 @app.route('/update', methods=['POST'])
 def update():
     return jsonify(app_ctrl.update()), requests.codes.ok
