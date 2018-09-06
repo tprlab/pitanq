@@ -36,6 +36,7 @@ import os.path
 import re
 import sys
 import traceback
+import json
 
 import numpy as np
 import tensorflow as tf
@@ -172,6 +173,10 @@ def main(_):
   image = sys.argv[1]
   ret = run_inference_on_image(image)
   print ret
+  if len(sys.argv) > 2:
+    with open(sys.argv[2], 'w') as outfile:
+        json.dump(ret, outfile)    
+
 
 
 if __name__ == '__main__':

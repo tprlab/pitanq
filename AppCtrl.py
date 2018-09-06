@@ -9,6 +9,7 @@ import PiConf
 import ClassifyCtrl
 
 import socket
+import os
 
 
 class AppCtrl:
@@ -29,6 +30,8 @@ class AppCtrl:
         self.haar_ctrl = HaarDetectCtrl.createDetectCtrl()
         self.dnn_ctrl = DnnDetectCtrl.createDetectCtrl()
         self.class_ctrl = ClassifyCtrl.createClassifyCtrl()
+        if not os.path.exists(PiConf.TMP_DIR):
+            os.makedirs(PiConf.TMP_DIR)
 
 
 
