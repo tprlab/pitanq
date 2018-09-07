@@ -29,7 +29,7 @@ class ClassifyCtrl:
             os.makedirs(tmp_path)
 
         outpath = tmp_path + "/" + self.get_file_id() + ".json"
-        process = Popen([PyConf.PYTHON_PROCESS, "classify.py", path, outpath], stdout=PIPE)
+        process = Popen([PiConf.PYTHON_PROCESS, PiConf.PITANQ_HOME + "/classify.py", path, outpath], stdout=PIPE)
         (output, err) = process.communicate()
         exit_code = process.wait()
         return json.load(open(outpath))
