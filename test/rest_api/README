@@ -24,4 +24,5 @@ POST /cam/left
 
 POST /detect/haar/<phid>
 POST /detect/dnn/<phid>
+POST /classify/tf/<phid>
 
