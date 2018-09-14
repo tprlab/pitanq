@@ -27,6 +27,29 @@ Raspbian Jessie runs on the Raspberry.
 
 Python service (from this repo) controls the whole tank via REST interface.
 
+GET /ping 
+GET /version 
+GET /name 
+GET /dist  
+POST /fwd/on 
+POST /fwd/off 
+POST /back/on 
+POST /back/off 
+POST /left/on 
+POST /left/off 
+POST /right/on 
+POST /right/off  
+POST /photo/make 
+GET /photo/:phid 
+GET /photo/list  
+POST /cam/up 
+POST /cam/down 
+POST /cam/right 
+POST /cam/left  
+POST /detect/haar/:phid 
+POST /detect/dnn/:phid
+POST /classify/tf/:phid
+
 This service uses AI frameworks:
 - Tensoflow (built by [Sam Abrahams](https://github.com/samjabrahams/tensorflow-on-raspberry-pi))
 - OpenCV (built by [me](https://github.com/tprlab/pi-opencv))
