@@ -14,7 +14,7 @@ class PhotoCtrl:
             os.makedirs(PiConf.PHOTO_PATH)
 
     def get_file_id(self):
-        return datetime.now().strftime('%d%m%Y%H%M%S')
+        return datetime.now().strftime('%d%m%Y%H%M%S-%f')
 
     def make_photo(self):
         phid = self.get_file_id()

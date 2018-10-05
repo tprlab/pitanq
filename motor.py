@@ -1,16 +1,20 @@
 import RPi.GPIO as GPIO
 import time
 import logging
+import PiConf
 
  
 
-LF = 40
-LB = 38
+LF = PiConf.MOTOR_LF
+LB = PiConf.MOTOR_LB
 
-RF = 36
-RB = 32
+RF = PiConf.MOTOR_RF
+RB = PiConf.MOTOR_RB
 
 motors = [RF, RB, LF, LB]
+
+R_state = 0
+L_state = 0
 
 def init():
 
@@ -28,89 +32,156 @@ def stop():
     logging.debug("Motor stop")
     for m in motors:
         GPIO.setup(m,GPIO.LOW)
-    
+
+# Motor    
 
 def run_motor(m, t):
     GPIO.output(m,GPIO.HIGH)
     time.sleep(t)
     GPIO.output(m,GPIO.LOW)
 
+# Motor forward
+
+def motor_right_on():
+    logging.debug("Motor right on")
+    GPIO.output(RF, GPIO.HIGH)
+
+def motor_right_off():
+    logging.debug("Motor right off")
+    GPIO.output(RF, GPIO.LOW)
+
+def motor_left_on():
+    logging.debug("Motor left on")
+    GPIO.output(LF, GPIO.HIGH)
+
+def motor_left_off():
+    logging.debug("Motor left off")
+    GPIO.output(LF, GPIO.LOW)
+
+# Motor reverse
+
+def motor_rright_on():
+    logging.debug("Motor rright on")
+    GPIO.output(RB, GPIO.HIGH)
+
+def motor_rright_off():
+    logging.debug("Motor rright off")
+    GPIO.output(RB, GPIO.LOW)
+
+def motor_rleft_on():
+    logging.debug("Motor rleft on")
+    GPIO.output(LB, GPIO.HIGH)
+
+
+def motor_rleft_off():
+    logging.debug("Motor rleft off")
+    GPIO.output(LB, GPIO.LOW)
  
+## Turns
+
+#Left
+
+def turn_left_on():
+    logging.debug("Turn left on")
+    motor_right_on()
+
+def turn_left_off():
+    logging.debug("Turn left off")
+    motor_right_off()
+
+def turn_xleft_on():
+    logging.debug("Turn xleft on")
+    motor_right_on()
+    motor_rleft_on()
+
+def turn_xleft_off():
+    logging.debug("Turn xleft off")
+    motor_right_off()
+    motor_rleft_off()
+
+# Right
+
+def turn_right_on():
+    logging.debug("Turn right on")
+    motor_left_on()
+
+def turn_right_off():
+    logging.debug("Turn right off")
+    motor_left_off()
+
+def turn_xright_on():
+    logging.debug("Turn xright on")
+    motor_left_on()
+    motor_rright_on()
+
+def turn_xright_off():
+    logging.debug("Turn xright off")
+    motor_left_off()
+    motor_rright_off()
 
 
+## Test
 
 def forward(t):
-    GPIO.output(RF, GPIO.HIGH)
-    GPIO.output(LF, GPIO.HIGH)
+    motor_right_on()
+    motor_left_on()
     time.sleep(t)
-    GPIO.output(RF, GPIO.LOW)
-    GPIO.output(LF, GPIO.LOW)
+    motor_right_off()
+    motor_left_off()
 
 def back(t):
-    logging.debug("Motor back for %f sec" % t)
-    GPIO.output(RB, GPIO.HIGH)
-    GPIO.output(LB, GPIO.HIGH)
+    motor_rright_on()
+    motor_rleft_on()
     time.sleep(t)
-    GPIO.output(RB, GPIO.LOW)
-    GPIO.output(LB, GPIO.LOW)
+    motor_rright_off()
+    motor_rleft_off()
 
 def right(t):
-    GPIO.output(RF, GPIO.HIGH)
-    GPIO.output(LB, GPIO.HIGH)
+    turn_xright_on()
     time.sleep(t)
-    GPIO.output(RF, GPIO.LOW)
-    GPIO.output(LB, GPIO.LOW)
+    turn_xright_off()
 
 def left(t):
-    GPIO.output(LF, GPIO.HIGH)
-    GPIO.output(RB, GPIO.HIGH)
+    turn_xleft_on()
     time.sleep(t)
-    GPIO.output(LF, GPIO.LOW)
-    GPIO.output(RB, GPIO.LOW)
+    turn_xleft_off()
 
+# API
 
 def fwd_on():
-    logging.debug("Motor fwd on")    
-    GPIO.output(RF, GPIO.HIGH)
-    GPIO.output(LF, GPIO.HIGH)
+    logging.debug("fwd on")    
+    motor_right_on()
+    motor_left_on()
 
 def fwd_off():
-    logging.debug("Motor fwd off")    
-    GPIO.output(RF, GPIO.LOW)
-    GPIO.output(LF, GPIO.LOW)
+    logging.debug("fwd off")    
+    motor_right_off()
+    motor_left_off()
 
 
 def back_on():
-    logging.debug("Motor back on")
-    GPIO.output(RB, GPIO.HIGH)
-    GPIO.output(LB, GPIO.HIGH)
+    logging.debug("back on")
+    motor_rright_on()
+    motor_rleft_on()
 
 def back_off():
-    logging.debug("Motor back off")
-    GPIO.output(RB, GPIO.LOW)
-    GPIO.output(LB, GPIO.LOW)
+    logging.debug("back off")
+    motor_rright_off()
+    motor_rleft_off()
 
 
 def right_on():
-    logging.debug("Motor right on")
-    GPIO.output(RF, GPIO.HIGH)
-    GPIO.output(LB, GPIO.HIGH)
+    turn_right_on()
 
 def right_off():
-    logging.debug("Motor right off")
-    GPIO.output(RF, GPIO.LOW)
-    GPIO.output(LB, GPIO.LOW)
+    turn_right_off()
 
 def left_on():
-    logging.debug("Motor left on")
-    GPIO.output(LF, GPIO.HIGH)
-    GPIO.output(RB, GPIO.HIGH)
-
+    turn_left_on()
 
 def left_off():
-    logging.debug("Motor left off")
-    GPIO.output(LF, GPIO.LOW)
-    GPIO.output(RB, GPIO.LOW)
+    turn_left_off()
+
 
 
 def back_test(t):

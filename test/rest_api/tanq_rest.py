@@ -44,6 +44,10 @@ def left_on():
 def left_off():
     return tanq_post("/left/off")
 
+def set_motors(mode):
+    return tanq_post("/motor/" + mode)
+
+
 
 def photo():
     return tanq_post("/photo/make")
@@ -90,20 +94,31 @@ def classify_tf(id):
 
 
 
-def get_photo(pid):
+def get_photo(pid, outpath = "./"):
     path = "/photo/" + pid
     rsp = requests.get(URL + path, stream=True)
     if rsp.status_code != requests.codes.ok:
         print("No photo %s found" % pid)
         return
 
-    fname = pid + ".jpg"
+    fname = outpath + "/" + pid + ".jpg"
     with open(fname, "wb") as f:
         for chunk in rsp.iter_content(1024):
             f.write(chunk)
 
     print ("Saved", fname)
+    return fname
 
 
 if __name__ == '__main__':
-    print classify_tf(sys.argv[1])
+    #print classify_tf(sys.argv[1])
+    #print device_name()
+    set_motors("ff")
+    time.sleep(2)
+    print("stop left")
+    set_motors("0s")
+    time.sleep(0.1)
+    set_motors("0f")
+    time.sleep(2)
+    print("stop all")
+    set_motors("ss")

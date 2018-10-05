@@ -66,6 +66,11 @@ class AppCtrl:
     def left_off(self):
         return {"rc" : self.motor_ctrl.left_off()}
 
+    def set_motors(self, r, l):
+        rc, lc = self.motor_ctrl.set_motors(r, l)
+        return {"r" : rc, "l" : lc}
+
+
 
     def make_photo(self):
         rc, info = self.photo_ctrl.make_photo()

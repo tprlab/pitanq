@@ -41,6 +41,23 @@ class MotorCtrl:
     def left_off(self):
         return self.safeMotorCall(motor.left_off, "motor.left_off")
 
+    def set_motors(self, r, l):
+        lc = False
+        rc = False
+        logging.debug("Set motors " + r + " " + l)
+        if r == "f":
+            rc = self.safeMotorCall(motor.motor_right_on, "motor.motor_right_on")
+        elif r == "s":
+            rc = self.safeMotorCall(motor.motor_right_off, "motor.motor_right_off")
+
+        if l == "f":
+            lc = self.safeMotorCall(motor.motor_left_on, "motor.motor_left_on")
+        elif l == "s":
+            lc = self.safeMotorCall(motor.motor_left_off, "motor.motor_left_off")
+        return rc, lc
+
+
+
 
 
 

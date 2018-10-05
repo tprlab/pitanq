@@ -47,6 +47,14 @@ def forward_on():
 def forward_off():
     return jsonify(app_ctrl.fwd_off()), requests.codes.ok
 
+@app.route('/motor/<mode>', methods=['POST'])
+def set_motors(mode):
+    if len(mode) < 2:
+        return jsonify({"rc" : False, "lc" : False}), requests.codes.ok
+        
+    return jsonify(app_ctrl.set_motors(mode[0], mode[1])), requests.codes.ok
+
+
 
 @app.route('/back/on', methods=['POST'])
 def backward_on():
