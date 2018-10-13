@@ -59,3 +59,6 @@ And third-party driver for PWM controller from [SunFounder](https://github.com/t
 ## Phone application
 There is an [android application](https://play.google.com/store/apps/details?id=tprlab.com.pitanq) to control the tank.
 Whenever I will learn IOS then an Apple app will be available. Not now.
+
+## Tank
+More info about tank at the product [website](https://pitanq.com)
