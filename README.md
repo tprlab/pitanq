@@ -61,4 +61,4 @@ There is an [android application](https://play.google.com/store/apps/details?id=
 Whenever I will learn IOS then an Apple app will be available. Not now.
 
 ## Tank
-More info about tank at the product [website](https://pitanq.com)
+More info about the tank at the product [website](https://pitanq.com)
