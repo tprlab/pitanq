@@ -36,7 +36,7 @@ def distance():
     ok = False
     x = -1
  
-    for i in range(1, 100000):
+    for i in range(1, 5000):
         inp = GPIO.input(PiConf.DIST_ECHO)
         StopTime = time.time()
         if inp == 0:
