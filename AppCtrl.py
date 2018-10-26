@@ -7,6 +7,7 @@ import DistCtrl
 import subprocess
 import PiConf
 import ClassifyCtrl
+import MTFollowLineCtrl
 
 import socket
 import os
@@ -21,6 +22,7 @@ class AppCtrl:
     dnn_ctrl = None
     dist_ctrl = None
     class_ctrl = None
+    line_ctrl = None
 
     def __init__(self):
         self.motor_ctrl = MotorCtrl.createMotorCtrl()
@@ -30,6 +32,7 @@ class AppCtrl:
         self.haar_ctrl = HaarDetectCtrl.createDetectCtrl()
         self.dnn_ctrl = DnnDetectCtrl.createDetectCtrl()
         self.class_ctrl = ClassifyCtrl.createClassifyCtrl()
+        self.line_ctrl = MTFollowLineCtrl.MTFollowLineCtrl(self.motor_ctrl, self.photo_ctrl)
         if not os.path.exists(PiConf.TMP_DIR):
             os.makedirs(PiConf.TMP_DIR)
 
@@ -117,6 +120,22 @@ class AppCtrl:
             
     def classify(self, phid):
         return self.class_ctrl.classify_photo(phid)
+
+    def start_follow(self):
+        return self.line_ctrl.start_follow()
+
+    def stop_follow(self):
+        return self.line_ctrl.stop_follow()
+
+    def get_follow_photo(self):
+        return self.line_ctrl.get_last_photo()
+
+    def get_track_photo_path(self, track, photo):
+        return self.line_ctrl.get_track_photo_path(track, photo)
+
+
+    def get_follow_id(self):
+        return self.line_ctrl.track_id
 
 
 def createCtrl():
