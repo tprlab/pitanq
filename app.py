@@ -94,6 +94,14 @@ def get_photo(phid):
         return "File not found", requests.codes.not_found
     return send_from_directory(directory=path, filename=filename)
 
+@app.route('/photo/track/<tid>/<phid>', methods=['GET'])
+def get_track_photo(tid, phid):
+    path, filename = app_ctrl.get_track_photo_path(tid, phid)
+    if path is None:
+        return "File not found", requests.codes.not_found
+    return send_from_directory(directory=path, filename=filename)
+
+
 @app.route('/photo/list', methods=['GET'])
 def get_photos():
     lst = app_ctrl.getPhotosList()
@@ -132,6 +140,25 @@ def classify_tf(phid):
 @app.route('/update', methods=['POST'])
 def update():
     return jsonify(app_ctrl.update()), requests.codes.ok
+
+
+@app.route('/follow/start', methods=['POST'])
+def start_follow():
+    return jsonify({"id" : app_ctrl.start_follow()}), requests.codes.ok
+
+
+@app.route('/follow/stop', methods=['POST'])
+def stop_follow():
+    return jsonify({"rs" : app_ctrl.stop_follow()}), requests.codes.ok
+
+@app.route('/follow/id', methods=['GET'])
+def get_follow_id():
+    return jsonify({"id" : app_ctrl.get_follow_id()}), requests.codes.ok
+
+@app.route('/follow/photo', methods=['GET'])
+def get_follow_photo():
+    return jsonify({"photo" : app_ctrl.get_follow_photo()}), requests.codes.ok
+
 
 
 @app.route('/dist', methods=['GET'])

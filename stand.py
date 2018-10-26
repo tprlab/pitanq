@@ -14,7 +14,7 @@ servo_max = 600
 
 
 PAN_0 = 450
-TILT_0 = 320
+TILT_0 = 340
 
 class StandCtrl:
 

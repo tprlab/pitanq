@@ -2,6 +2,7 @@ import requests
 import time
 import json
 import sys
+import os
 
 
 URL = "http://192.168.1.164:5000"
@@ -92,6 +93,20 @@ def dist():
 def classify_tf(id):
     return tanq_post("/classify/tf/" + id)
 
+def start_follow():
+    return tanq_post("/follow/start")
+
+def stop_follow():
+    return tanq_post("/follow/stop")
+
+def follow_id():
+    resp, rc = tanq_get("/follow/id")
+    return resp
+
+def follow_photo():
+    resp, rc = tanq_get("/follow/photo")
+    return resp
+
 
 
 def get_photo(pid, outpath = "./"):
@@ -102,6 +117,12 @@ def get_photo(pid, outpath = "./"):
         return
 
     fname = outpath + "/" + pid + ".jpg"
+    slash = fname.rfind("/")
+    folder = fname[:slash]
+    print "Folder", folder
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+
     with open(fname, "wb") as f:
         for chunk in rsp.iter_content(1024):
             f.write(chunk)
@@ -113,6 +134,7 @@ def get_photo(pid, outpath = "./"):
 if __name__ == '__main__':
     #print classify_tf(sys.argv[1])
     #print device_name()
+    """
     set_motors("ff")
     time.sleep(2)
     print("stop left")
@@ -122,3 +144,15 @@ if __name__ == '__main__':
     time.sleep(2)
     print("stop all")
     set_motors("ss")
+    """
+    start_follow()
+    fid = follow_id()
+    print "Started follow", fid
+
+    for i in xrange(0, 10):
+        time.sleep(0.5)
+        pr = follow_photo()
+        print "Follow photo", pr
+        if pr["photo"] is not None:
+            get_photo(pr["photo"])
+    stop_follow()
