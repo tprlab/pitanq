@@ -50,6 +50,14 @@ Python service (from this repo) controls the whole tank via REST interface.
 * POST /detect/dnn/:phid
 * POST /classify/tf/:phid
 
+* POST /motor/:mode
+* POST /follow/start
+* POST /follow/stop
+* POST /follow/prepare
+* GET /follow/id
+* GET /follow/photo
+* GET /photo/track/:track_id/:ph_id 
+
 This service uses AI frameworks:
 - Tensoflow (built by [Sam Abrahams](https://github.com/samjabrahams/tensorflow-on-raspberry-pi))
 - OpenCV (built by [me](https://github.com/tprlab/pi-opencv))
