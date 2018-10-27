@@ -24,7 +24,7 @@ class FollowLineCtrl:
 
     photo_n = 0
 
-    path = ""
+    path = None
     iter_n = 0
 
     track_id = None
@@ -66,6 +66,10 @@ class FollowLineCtrl:
         finally:
             self.motor_ctrl.set_motors("s", "s")
 
+        self.path = None
+        self.track_id = None
+        self.photo_n = 0
+        self.iter_n = 0
 
 
     def follow_step(self, i):
@@ -111,6 +115,9 @@ class FollowLineCtrl:
 
         return None, None
 
+    def prepare_follow(self):
+        return self.get_vector()
+
     def get_photo(self):
         rc, phid = self.photo_ctrl.make_photo()
         if rc  == False:
@@ -121,8 +128,12 @@ class FollowLineCtrl:
         self.photo_n += 1
         return True, phid, fpath + "/" + fname
 
-    def get_photo_path(self):
-        return "{0}/{1}.jpg".format(self.path, self.photo_n)
+    def get_photo_path(self, fname):
+        if self.path is not None:
+            return "{0}/{1}.jpg".format(self.path, self.photo_n)
+        dot = fname.rfind(".")
+        fpath = fname[:dot] + "-1" + fname[dot:]
+        return fpath
 
     def get_track_photo_path(self, track, photo):
         return "{0}/track/{1}".format(PiConf.PHOTO_PATH, track), "{}.jpg".format(photo)
@@ -135,9 +146,11 @@ class FollowLineCtrl:
         rc, phid, fname = self.get_photo()
         if not rc:
             return None, None
-        print self.path, " -- ", self.photo_n
-        self.last_photo_path = self.get_photo_path()
+        self.last_photo_path = self.get_photo_path(fname)
+        logging.debug(("Writing track photo", self.last_photo_path))
         angle, shift = track.handle_pic(fname, fout=self.last_photo_path)
+        if angle is None:
+            self.last_photo_path = fname
         return angle, shift
 
 

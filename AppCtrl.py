@@ -133,9 +133,13 @@ class AppCtrl:
     def get_track_photo_path(self, track, photo):
         return self.line_ctrl.get_track_photo_path(track, photo)
 
-
     def get_follow_id(self):
         return self.line_ctrl.track_id
+
+    def prepare_follow(self):
+        a, s = self.line_ctrl.prepare_follow()
+        return {"angle" : a, "shift" : s}
+
 
 
 def createCtrl():

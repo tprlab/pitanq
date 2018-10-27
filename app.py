@@ -151,6 +151,11 @@ def start_follow():
 def stop_follow():
     return jsonify({"rs" : app_ctrl.stop_follow()}), requests.codes.ok
 
+@app.route('/follow/prepare', methods=['POST'])
+def prepare_follow():
+    return jsonify(app_ctrl.prepare_follow()), requests.codes.ok
+
+
 @app.route('/follow/id', methods=['GET'])
 def get_follow_id():
     return jsonify({"id" : app_ctrl.get_follow_id()}), requests.codes.ok
