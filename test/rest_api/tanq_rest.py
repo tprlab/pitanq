@@ -96,6 +96,9 @@ def classify_tf(id):
 def start_follow():
     return tanq_post("/follow/start")
 
+def prepare_follow():
+    return tanq_post("/follow/prepare")
+
 def stop_follow():
     return tanq_post("/follow/stop")
 
@@ -130,6 +133,28 @@ def get_photo(pid, outpath = "./"):
     print ("Saved", fname)
     return fname
 
+def test_follow_prepare():
+    r = prepare_follow()
+    print r
+    r = follow_photo()
+    print r
+    ph = r["photo"]
+    get_photo(ph)
+    
+
+def test_follow():
+    start_follow()
+    fid = follow_id()
+    print "Started follow", fid
+
+    for i in xrange(0, 10):
+        time.sleep(0.5)
+        pr = follow_photo()
+        print "Follow photo", pr
+        if pr["photo"] is not None:
+            get_photo(pr["photo"])
+    stop_follow()
+
 
 if __name__ == '__main__':
     #print classify_tf(sys.argv[1])
@@ -145,14 +170,4 @@ if __name__ == '__main__':
     print("stop all")
     set_motors("ss")
     """
-    start_follow()
-    fid = follow_id()
-    print "Started follow", fid
-
-    for i in xrange(0, 10):
-        time.sleep(0.5)
-        pr = follow_photo()
-        print "Follow photo", pr
-        if pr["photo"] is not None:
-            get_photo(pr["photo"])
-    stop_follow()
+    test_follow_prepare()
