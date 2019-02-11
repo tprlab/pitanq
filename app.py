@@ -13,7 +13,7 @@ if not os.path.isdir(PiConf.LOG_PATH):
     os.makedirs(PiConf.LOG_PATH)        
 
 log_file = PiConf.LOG_PATH + "/" + PiConf.LOG_FILE
-logging.basicConfig(filename=log_file,level=logging.DEBUG)
+logging.basicConfig(filename=log_file,level=logging.DEBUG, format='%(asctime)s.%(msecs)03d %(threadName)s %(levelname)-8s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 app = Flask(__name__)
 app_ctrl = AppCtrl.createCtrl()
@@ -163,6 +163,26 @@ def get_follow_id():
 @app.route('/follow/photo', methods=['GET'])
 def get_follow_photo():
     return jsonify({"photo" : app_ctrl.get_follow_photo()}), requests.codes.ok
+
+
+@app.route('/walk/start', methods=['POST'])
+def start_walk():
+    return jsonify({"id" : app_ctrl.start_walk()}), requests.codes.ok
+
+
+@app.route('/walk/stop', methods=['POST'])
+def stop_walk():
+    return jsonify({"rs" : app_ctrl.stop_walk()}), requests.codes.ok
+
+
+@app.route('/walk/prepare', methods=['POST'])
+def prepare_walk():
+    return jsonify(app_ctrl.prepare_walk()), requests.codes.ok
+
+
+@app.route('/walk/photo', methods=['GET'])
+def get_walk_photo():
+    return jsonify({"photo" : app_ctrl.get_walk_photo()}), requests.codes.ok
 
 
 

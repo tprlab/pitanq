@@ -110,6 +110,17 @@ def follow_photo():
     resp, rc = tanq_get("/follow/photo")
     return resp
 
+def prepare_path():
+    return tanq_post("/path/prepare")
+
+def get_path_color_range():
+    return tanq_get("/path/color/range")
+
+def set_path_color_range(lower, upper, fmt):
+    p = {"lower" : lower, "upper" : upper, "fmt" : fmt}
+    #p = {"upper" : upper, "fmt" : fmt}
+    return tanq_post("/path/color/set", p)
+
 
 
 def get_photo(pid, outpath = "./"):
@@ -140,7 +151,15 @@ def test_follow_prepare():
     print r
     ph = r["photo"]
     get_photo(ph)
-    
+   
+
+def test_path_prepare():
+    rs, rc = prepare_path()
+    if rc == requests.codes.ok:
+        get_photo(rs["path"])
+    else:
+        print rc, rs
+ 
 
 def test_follow():
     start_follow()
@@ -170,4 +189,20 @@ if __name__ == '__main__':
     print("stop all")
     set_motors("ss")
     """
-    test_follow_prepare()
+    #test_follow_prepare()
+
+    #rs, rc = get_path_color_range()
+    #print rs, rc
+
+    #rs, rc = set_path_color_range([26, 121,  59], [27, 225, 122], "hsv")
+
+    #rs, rc = set_path_color_range([24, 120,  64], [25, 207,  96], "hsv")
+    #rs, rc = set_path_color_range([23, 101, 53], [28, 221, 116], "hsv")
+
+    #rs, rc = set_path_color_range([53, 42, 7], [116, 113, 70], "rgb")
+    #print rc
+    #rs, rc = get_path_color_range()
+    #print rs, rc
+    #test_path_prepare()
+    ret, code = photo_list()
+    print ret

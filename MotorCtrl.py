@@ -49,11 +49,21 @@ class MotorCtrl:
             rc = self.safeMotorCall(motor.motor_right_on, "motor.motor_right_on")
         elif r == "s":
             rc = self.safeMotorCall(motor.motor_right_off, "motor.motor_right_off")
+        elif r == "r":
+            rc = self.safeMotorCall(motor.motor_rright_on, "motor.motor_rright_on")
+        elif r == "h":
+            rc = self.safeMotorCall(motor.motor_rright_off, "motor.motor_rright_off")
+
 
         if l == "f":
             lc = self.safeMotorCall(motor.motor_left_on, "motor.motor_left_on")
         elif l == "s":
             lc = self.safeMotorCall(motor.motor_left_off, "motor.motor_left_off")
+        elif l == "r":
+            rc = self.safeMotorCall(motor.motor_rleft_on, "motor.motor_rleft_on")
+        elif l == "h":
+            rc = self.safeMotorCall(motor.motor_rleft_off, "motor.motor_rleft_off")
+
         return rc, lc
 
 

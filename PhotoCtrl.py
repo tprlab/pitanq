@@ -52,8 +52,22 @@ class MJPhotoCtrl(PhotoCtrl):
         path = os.path.join(PiConf.PHOTO_PATH, phid + ".jpg")
         logging.debug("Making mjpeg photo %s" % path)
         try:
-            subprocess.call(["wget", "-O", path, PHOTO_URL])
-            return True, phid
+            rc = subprocess.call(["wget", "-O", path, PHOTO_URL])
+            ok = rc == 0
+            if ok == False:
+                return ok, None
+            if not os.path.exists(path):
+                logging.debug(("Photo", path, "does not exist"))
+                return False, None
+            if os.path.getsize(path) == 0:
+                logging.debug(("Photo", path, "is empty"))
+                try:
+                    os.remove(path)
+                except:
+                    logging.error(("Cannot remove empty photo", path))
+
+                return False, None
+            return ok, phid
         except Exception as e:
             logging.exception("Cannot make a photo")
             return False, e.message

@@ -66,17 +66,12 @@ def prepare_pic(image):
 
 
 def find_main_countour(image):
-
-    im2, cnts, hierarchy = cv.findContours(image, cv.RETR_CCOMP, cv.CHAIN_APPROX_SIMPLE)
-
+    cnts, hierarchy = cv.findContours(image, cv.RETR_CCOMP, cv.CHAIN_APPROX_SIMPLE)
     C = None
     if cnts is not None and len(cnts) > 0:
          C = max(cnts, key = cv.contourArea)
-
-
     if C is None:
         return None, None
-
     rect = cv.minAreaRect(C)
     box = cv.boxPoints(rect)
     box = np.int0(box)

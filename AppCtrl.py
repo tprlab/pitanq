@@ -8,6 +8,7 @@ import subprocess
 import PiConf
 import ClassifyCtrl
 import MTFollowLineCtrl
+import MTWalkCtrl
 
 import socket
 import os
@@ -23,6 +24,7 @@ class AppCtrl:
     dist_ctrl = None
     class_ctrl = None
     line_ctrl = None
+    walk_ctrl = None
 
     def __init__(self):
         self.motor_ctrl = MotorCtrl.createMotorCtrl()
@@ -33,6 +35,7 @@ class AppCtrl:
         self.dnn_ctrl = DnnDetectCtrl.createDetectCtrl()
         self.class_ctrl = ClassifyCtrl.createClassifyCtrl()
         self.line_ctrl = MTFollowLineCtrl.MTFollowLineCtrl(self.motor_ctrl, self.photo_ctrl)
+        self.walk_ctrl = MTWalkCtrl.createWalkCtrl(self.motor_ctrl, self.photo_ctrl)
         if not os.path.exists(PiConf.TMP_DIR):
             os.makedirs(PiConf.TMP_DIR)
 
@@ -139,6 +142,20 @@ class AppCtrl:
     def prepare_follow(self):
         a, s = self.line_ctrl.prepare_follow()
         return {"angle" : a, "shift" : s}
+
+    def prepare_walk(self):
+        rc = self.walk_ctrl.prepare_action()
+        return {"rc" : rc}
+
+    def get_walk_photo(self):
+        return self.walk_ctrl.get_action_pic()
+
+
+    def start_walk(self):
+        return self.walk_ctrl.start_follow()
+
+    def stop_walk(self):
+        return self.walk_ctrl.stop_follow()
 
 
 
