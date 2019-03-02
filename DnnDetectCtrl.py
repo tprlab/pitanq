@@ -5,12 +5,15 @@ import PiConf
 
 class DnnDetectCtrl:
 
+    def detect_file(self, path):
+        pic, rects = dnn_detect.detectPic(path)
+        logging.debug("Detected on" + path + ": " + str(rects))
+        return rects
+
 
     def do_detect(self, img):
         path = PiConf.PHOTO_PATH + "/" + img + ".jpg"
-        pic, rects = dnn_detect.detectPic(path)
-        logging.debug("Detected on" + img + ": " + str(rects))
-        return rects
+        return self.detect_file(path)
             
 
 
@@ -21,10 +24,6 @@ def createDetectCtrl():
 
 if __name__ == '__main__':
     D = createDetectCtrl()
-    P = PhotoCtrl.createPhotoCtrl()
-    photos = P.get_list()
-    if len(photos) > 0:
-        p = photos[-1]
-        print "Detecting photo", p
-        rc = D.do_detect(p)
-        print rc
+    p = "test/data/detect.jpg"
+    rc = D.detect_file(p)
+    print (rc)

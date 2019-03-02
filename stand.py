@@ -87,17 +87,17 @@ def createStandCtrl():
 
 if __name__ == '__main__':    
     stand = StandCtrl()
-    print "Pan+"
+    print ("Pan+")
     stand.up()
     time.sleep(1)
-    print "Tilt+"
+    print ("Tilt+")
     stand.right()
 
     time.sleep(1)
-    print "Pan-"
+    print ("Pan-")
     stand.down()
 
     time.sleep(1)
-    print "Tilt-"
+    print ("Tilt-")
     stand.left()
 

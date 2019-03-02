@@ -166,7 +166,7 @@ def createCtrl():
 
 if __name__ == '__main__':
     app = createCtrl()
-    print app.update()
+    print (app.update())
 
 
     

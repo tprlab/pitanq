@@ -6,6 +6,7 @@ from subprocess import Popen, PIPE
 import os
 import json
 from datetime import datetime
+import logging
 
 
 
@@ -32,7 +33,13 @@ class ClassifyCtrl:
         process = Popen([PiConf.PYTHON_PROCESS, PiConf.PITANQ_HOME + "/classify.py", path, outpath], stdout=PIPE)
         (output, err) = process.communicate()
         exit_code = process.wait()
-        return json.load(open(outpath))
+        if not os.path.exists(outpath):
+            logging.debug(("No output file for TF classifier", outpath))
+            return None
+        ret = None
+        with open(outpath, "r") as f:
+            ret = json.load(f)
+        return ret
 
 
 
@@ -42,13 +49,6 @@ def createClassifyCtrl():
 
 if __name__ == '__main__':
     D = createClassifyCtrl()
-    if len(sys.argv) > 1:
-        rc = D.classify_photo(sys.argv[1])
-        print rc
-    else:
-        P = PhotoCtrl.createPhotoCtrl()
-        photos = P.get_list()
-        if len(photos) > 0:
-            p = photos[-1]
-            rc = D.do_classify(p)
-            print rc
+    p = "test/data/detect.jpg"
+    rc = D.classify_ex(p)
+    print (rc)

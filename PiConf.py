@@ -7,7 +7,7 @@ MOTOR_LB = 32
 DIST_TRIGGER = 37
 DIST_ECHO = 35
 
-VERSION = 2.0
+VERSION = 3.0
 
 
 DNN_PATH = "/home/pi/ssd_mobilenet_v1_coco_11_06_2017/frozen_inference_graph.pb"
@@ -29,4 +29,4 @@ PITANQ_HOME = "/home/pi/pitanq"
 IMAGENET_MODEL_DIR = "/home/pi/imagenet"
 
 TMP_DIR = "/home/pi/pitanq/tmp"
-PYTHON_PROCESS = "/usr/bin/python"
+PYTHON_PROCESS = "/usr/bin/python3"

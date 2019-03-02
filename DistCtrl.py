@@ -14,4 +14,4 @@ def createDistCtrl():
 
 if __name__ == '__main__':
     dc = createDistCtrl()
-    print dc.distance()
+    print (dc.distance())

@@ -61,7 +61,7 @@ def get_gray_avg(img, Q, r):
 def filter_gray(img, Q, avg, A, blur, outfile = None):
     h, w = img.shape[:2]
     gray = np.zeros((h,w,1), np.uint8)
-    hblack = h / 3
+    hblack = int(h / 3)
 
     for x in range(0, w):
         for y in range(hblack, h):
@@ -121,7 +121,9 @@ def apply_mask(cpath, gpath, outpath, clr):
     return cimg
 
 
-def to_hsv(img):    
+def to_hsv(img):
+    if img is None:
+        return None
     return cv.cvtColor(img, cv.COLOR_BGR2HSV)
 
 def get_bright(img):
@@ -154,7 +156,7 @@ if __name__ == '__main__':
     #avg = get_gray_avg(img, 15, 10)
     #print "Avg", avg
     avg = 110
-    gray = filter_gray(img, 12, avg, 25)
+    gray = filter_gray(img, 12, avg, 25, 7)
 
 
     

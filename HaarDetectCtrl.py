@@ -19,12 +19,16 @@ class HaarDetectCtrl:
         logging.debug(ret)
         return ret
 
+    def detect_file(self, path):
+        pic, rects = detect.handleFile(path, self.cascade)
+        logging.debug("Detected on" + path + ": " + str(rects))
+        return self.structure(rects)
+
+
 
     def do_detect(self, img):
         path = PiConf.PHOTO_PATH + "/" + img + ".jpg"
-        pic, rects = detect.handleFile(path, self.cascade)
-        logging.debug("Detected on" + img + ": " + str(rects))
-        return self.structure(rects)
+        return self.detect_file(path)
             
 
 
@@ -35,10 +39,6 @@ def createDetectCtrl():
 
 if __name__ == '__main__':
     D = createDetectCtrl()
-    P = PhotoCtrl.createPhotoCtrl()
-    photos = P.get_list()
-    if len(photos) > 0:
-        p = photos[-1]
-        p = "floyd_1"
-        rc = D.do_detect(p)
-        print rc
+    p = "test/data/cat.jpg"
+    rc = D.detect_file(p)
+    print (rc)

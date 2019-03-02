@@ -89,7 +89,7 @@ class WalkCtrl:
             while(self.next()):
                 if not self.follow_step(self.iter_n):
                     break
-        except Exception, e:
+        except Exception as e:
             logging.exception("Cannot do a walk step")
         finally:
             self.motor_ctrl.set_motors("s", "s")
@@ -174,6 +174,7 @@ class WalkCtrl:
         logging.debug("Prepare walk")
         a = self.get_action()
         if a is None:
+            print("No action from pic", self.last_s_path)
             logging.debug(("No action from pic", self.last_s_path))
             self.last_p_path = None
             return False
@@ -195,8 +196,8 @@ class WalkCtrl:
         bright = wconf.get_bright(hsv)
         logging.debug(("Saved walk small photo", self.last_s_path, "bright", bright))
 
-        avg = int(bright)
-        if self.prepare:
+        avg = int(bright * 1.1)
+        if self.prepare or self.avg < 1:
             logging.debug(("Set avg bright", avg))
             self.avg = avg
             ar, ag, ab = wconf.get_avg_rgb(small, 8)
@@ -285,11 +286,11 @@ if __name__ == '__main__':
     photo_ctrl = PhotoCtrl.createPhotoCtrl()
 
     f = WalkCtrl(motor_ctrl, photo_ctrl)
-    s_path = "/home/pi/pls.jpg"    
+    #f.avg = 150
+    s_path = "photos/nn-s.jpg"    
     f.last_s_path = s_path
 
     img = cv.imread(s_path)
-    g_path = "/home/pi/g2.jpg"
+    g_path = "test/data/g_nn.jpg"    
     a = f.handle_small(img, g_path)
-    #f._draw_action_pic(a, "/home/pi/p2.jpg")
-    print "Predict", a
+    print ("Predict", a)

@@ -32,11 +32,11 @@ def detectPic(img_path, thr=0.3):
             a["w"] = int(right - left)
             a["h"] = int(bottom - top)
             ret.append(a)
-    print ret
+    #print (ret)
     return img, ret
 
 
 if __name__ == '__main__':
 
     d = detectPic(sys.argv[1])
-    print d
+    print (d)

@@ -172,7 +172,7 @@ def main(_):
 
   image = sys.argv[1]
   ret = run_inference_on_image(image)
-  print ret
+  print (ret)
   if len(sys.argv) > 2:
     with open(sys.argv[2], 'w') as outfile:
         json.dump(ret, outfile)    

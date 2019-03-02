@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
     time.sleep(0.5)
     photo(fname)
-    print "Saved photo", fname        
+    print ("Saved photo", fname)
         
 
 

@@ -11,7 +11,7 @@ def handleFile(f, cascade):
         return None, None
     rects = findObj(cascade, image)
 
-    print f, rects
+    print (f, rects)
     return image, rects
 
 
@@ -40,5 +40,5 @@ if __name__ == '__main__':
     path = sys.argv[1]
     cascade = "haarcascade_frontalcatface.xml"
     img, rects = handleFile(path, cascade)
-    print rects
+    print (rects)
     
