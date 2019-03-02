@@ -145,11 +145,10 @@ def get_turn(turn_state, shift_state):
 
 if __name__ == '__main__':
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-    pic = "1"
+    pic = "test/data/follow.jpg"
     if len(sys.argv) > 1:
         pic = sys.argv[1]
 
-    fname = "photos/" + pic + ".jpg"
-    angle, shift = handle_pic(fname, fout="out.jpg", show=True)
+    angle, shift = handle_pic(pic, fout="out.jpg", show=False)
     print ("Angle", angle, "Shift", shift)
                                    
