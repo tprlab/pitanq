@@ -69,4 +69,4 @@ def calc_box_vector(box):
     idx = [0, 1, 2, 3]
     if v_side < h_side:
         idx = [0, 3, 1, 2]
-    return ((box[idx[0]][0] + box[idx[1]][0]) / 2, (box[idx[0]][1] + box[idx[1]][1]) / 2), ((box[idx[2]][0] + box[idx[3]][0]) / 2, (box[idx[2]][1]  +box[idx[3]][1]) / 2)
+    return (int((box[idx[0]][0] + box[idx[1]][0]) / 2), int((box[idx[0]][1] + box[idx[1]][1]) / 2)), (int((box[idx[2]][0] + box[idx[3]][0]) / 2), int((box[idx[2]][1]  +box[idx[3]][1]) / 2))
