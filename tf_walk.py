@@ -42,6 +42,6 @@ if __name__ == '__main__':
     path = sys.argv[1]
     img = cv.imread(path, cv.IMREAD_GRAYSCALE)
     c = tfc.classify(img)
-    print "Classified", c
+    print ("Classified", c)
 
      
