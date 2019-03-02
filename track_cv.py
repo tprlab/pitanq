@@ -151,5 +151,5 @@ if __name__ == '__main__':
 
     fname = "photos/" + pic + ".jpg"
     angle, shift = handle_pic(fname, fout="out.jpg", show=True)
-    print "Angle", angle, "Shift", shift
+    print ("Angle", angle, "Shift", shift)
                                    
