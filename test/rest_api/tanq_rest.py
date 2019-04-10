@@ -16,7 +16,7 @@ def tanq_post(path, params = None):
 
 def tanq_get(path):
     rsp = requests.get(URL + path)
-    #print path, rsp.status_code, rsp.content
+    print path, rsp.status_code, rsp.content
     ret = rsp.json() if rsp.status_code == requests.codes.ok else rsp.content
     return ret, rsp.status_code
 
@@ -113,14 +113,12 @@ def follow_photo():
 def prepare_path():
     return tanq_post("/path/prepare")
 
-def get_path_color_range():
-    return tanq_get("/path/color/range")
 
-def set_path_color_range(lower, upper, fmt):
-    p = {"lower" : lower, "upper" : upper, "fmt" : fmt}
-    #p = {"upper" : upper, "fmt" : fmt}
-    return tanq_post("/path/color/set", p)
+def get_gps():
+    return tanq_get("/gps")
 
+def start_nav():
+    return tanq_post("/nav/start", params={"lat":40.1, "lon" : -74.1})
 
 
 def get_photo(pid, outpath = "./"):
@@ -204,5 +202,9 @@ if __name__ == '__main__':
     #rs, rc = get_path_color_range()
     #print rs, rc
     #test_path_prepare()
-    ret, code = photo_list()
-    print ret
+    ret, code = get_gps()
+    print code, ret
+
+    ret, code = start_nav()
+    print code, ret
+

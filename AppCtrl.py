@@ -9,9 +9,14 @@ import PiConf
 import ClassifyCtrl
 import MTFollowLineCtrl
 import MTWalkCtrl
+import GpsCtrl
+import GpsUtil
+import MTNavCtrl
 
 import socket
 import os
+import logging
+
 
 
 class AppCtrl:
@@ -25,6 +30,11 @@ class AppCtrl:
     class_ctrl = None
     line_ctrl = None
     walk_ctrl = None
+    gps_ctrl = None
+    nav_ctrl = None
+    mock_gps_ctrl = None
+
+    mock_gps = False
 
     def __init__(self):
         self.motor_ctrl = MotorCtrl.createMotorCtrl()
@@ -36,9 +46,16 @@ class AppCtrl:
         self.class_ctrl = ClassifyCtrl.createClassifyCtrl()
         self.line_ctrl = MTFollowLineCtrl.MTFollowLineCtrl(self.motor_ctrl, self.photo_ctrl)
         self.walk_ctrl = MTWalkCtrl.createWalkCtrl(self.motor_ctrl, self.photo_ctrl)
+        self.gps_ctrl = GpsCtrl.createGpsCtrl()
+        self.nav_ctrl = MTNavCtrl.createNavCtrl()
+
+        self.nav_ctrl.init(self.gps_ctrl, self.motor_ctrl)
+
+        self.mock_gps_ctrl = GpsCtrl.createMockGpsCtrl()
+        self.mock_gps_ctrl.setPoint(GpsUtil.nyc_pos)
+
         if not os.path.exists(PiConf.TMP_DIR):
             os.makedirs(PiConf.TMP_DIR)
-
 
 
     def ping(self):
@@ -156,6 +173,37 @@ class AppCtrl:
 
     def stop_walk(self):
         return self.walk_ctrl.stop_follow()
+
+    def get_mock_gps(self):
+        return self.mock_gps_ctrl.get_coords()
+
+    def get_gps(self):
+        gps = self.gps_ctrl if self.mock_gps == False else self.mock_gps_ctrl
+        g = gps.get_coords()
+        if g is None:
+            return {}
+        logging.debug(("Returned gps", g))
+        return g
+
+    def start_nav(self, target):
+        if self.mock_gps == False:
+            rc = self.nav_ctrl.start_nav(target)
+            return {"rc" : rc}
+
+        self.mock_gps_ctrl.setPoint(target)
+
+        return {"rc" : True}
+        
+
+    def stop_nav(self):
+        if self.mock_gps == False:
+            return {"rc" : True}
+            
+        rc = self.nav_ctrl.stop_nav()
+        return {"rc" : rc}
+
+        
+
 
 
 

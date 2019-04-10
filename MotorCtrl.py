@@ -1,5 +1,6 @@
 import motor
 import logging
+import time
 
 
 class MotorCtrl:
@@ -75,4 +76,10 @@ def createMotorCtrl():
     return MotorCtrl()
 
 
+if __name__ == '__main__': 
+    m = createMotorCtrl()
+    t = 2.5
+    m.right_on()
+    time.sleep(t)
+    m.right_off()
 

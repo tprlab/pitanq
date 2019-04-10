@@ -190,6 +190,28 @@ def get_walk_photo():
 def dist():
     return jsonify({"rs" : app_ctrl.dist()}), requests.codes.ok
 
+@app.route('/gps', methods=['GET'])
+def gps():
+    return jsonify(app_ctrl.get_gps()), requests.codes.ok
+
+@app.route('/nav/start', methods=['POST'])
+def start_nav():
+    content = request.json
+    if not "lat" in content:
+        return jsonify({"missed" : "lat"}), requests.codes.bad_request
+
+    if not "lon" in content:
+        return jsonify({"missed" : "lon"}), requests.codes.bad_request
+
+    return jsonify(app_ctrl.start_nav(content)), requests.codes.ok
+
+@app.route('/nav/stop', methods=['POST'])
+def stop_nav():
+    return jsonify(app_ctrl.stop_nav()), requests.codes.ok
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
