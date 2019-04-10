@@ -31,6 +31,7 @@ Python service (from this repo) controls the whole tank via REST interface.
 * GET /version 
 * GET /name 
 * GET /dist  
+* POST /update
 * POST /fwd/on 
 * POST /fwd/off 
 * POST /back/on 
@@ -57,6 +58,16 @@ Python service (from this repo) controls the whole tank via REST interface.
 * GET /follow/id
 * GET /follow/photo
 * GET /photo/track/:track_id/:ph_id 
+
+* POST /walk/start
+* POST /walk/stop
+* POST /walk/prepare
+* GET /walk/photo
+
+* GET /gps
+* POST /nav/start
+* POST /nav/stop
+
 
 This service uses AI frameworks:
 - Tensoflow (built by [Sam Abrahams](https://github.com/samjabrahams/tensorflow-on-raspberry-pi))
