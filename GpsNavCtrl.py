@@ -17,7 +17,7 @@ class GpsNavCtrl:
     az = None
     TURN_HALF = 1
     
-    MAX_ITERATIONS = 5
+    MAX_ITERATIONS = 10
     DIST_EPS = 0.003
     STEP_LEN = 5
     AZ_LEN = 3
