@@ -76,7 +76,7 @@ class GpsCtrl:
     def get_coords(self):
         for i in range(0,5):
             s = self.get_state()
-            #self.logger.debug(("GPS attempt",i, s))
+            self.logger.debug(("GPS attempt",i, s))
             if hasattr(s, "lat"):
                 ret = {"lat" : s["lat"], "lon" : s["lon"]}
                 if hasattr(s, "track"):

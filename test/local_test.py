@@ -14,10 +14,12 @@ import DnnDetectCtrl
 import ClassifyCtrl
 import FollowLineCtrl
 import WalkCtrl
+import RoadMask
+import RoadClass
 
 import track_cv
 
-
+"""
 class MotorTest(unittest.TestCase):
 
     motor_ctrl = MotorCtrl.createMotorCtrl()
@@ -107,7 +109,7 @@ class TFClassifyTest(unittest.TestCase):
             if name.find("laptop") != -1:
                 laptop_found = True
         self.assertEqual(laptop_found, True, "Laptop not detected by TF")
-
+"""
 class MockPhotoCtrl:
     path = None
     name = None
@@ -151,7 +153,7 @@ class MockMotorCtrl:
     def left_off(self):
         return True
 
-
+"""
 class FollowTest(unittest.TestCase):
 
     def test_vector(self):
@@ -169,33 +171,90 @@ class FollowTest(unittest.TestCase):
         angle, shift = follow.prepare_follow()
         print("Prepare", angle, shift)
 
+"""
+
 class WalkTest(unittest.TestCase):
 
     def test_classify(self):
         m = MockMotorCtrl()
         ph = MockPhotoCtrl()
-        w = WalkCtrl.WalkCtrl(m, ph)
-        ph.init("/home/pi/pitanq/test/data", "nns")
+        w = WalkCtrl.WalkCtrl(m, ph, RoadClass.RoadClass("cv"))
+        ph.init("/home/pi/pitanq/test/data", "nn")
 
         w.avg = 130
-        s_path = "test/data/nns.jpg"    
-        w.last_s_path = s_path
 
-        img = cv.imread(s_path)
         g_path = "test/data/g_nn.jpg"    
-        a = w.handle_small(img, g_path)
-        self.assertEqual(a == -1, True, "Incorrect prediction:" + str(a))
+        a = w.get_action()
+        self.assertEqual(a == 0, True, "Incorrect prediction:" + str(a))
+
+        pic = w.get_action_pic()
+        self.assertEqual(pic is not None, True, "Action pic for self walk is none")
 
 
-    def test_classify_ex(self):
-        m = MockMotorCtrl()
+
+    def test_walk_prep_cv(self):
         ph = MockPhotoCtrl()
-        w = WalkCtrl.WalkCtrl(m, ph)
+        w = WalkCtrl.PreWalkCtrl(ph, RoadClass.RoadClass("cv"))
         ph.init("/home/pi/pitanq/test/data", "nn")
         rc = w.prepare_action()
-        self.assertEqual(rc, True, "Walk prepare failed")
+        self.assertEqual(rc, True, "CV Walk prepare failed")
+        ppath = w.last_p_path
+        print("cv walk outpath", ppath)
+        pic = w.get_action_pic()
+        self.assertEqual(pic is not None, True, "Action pic for cv walk is none")
 
-        
+
+
+    def test_walk_prep_seg(self):
+        ph = MockPhotoCtrl()
+        w = WalkCtrl.PreWalkCtrl(ph, RoadClass.RoadClass("seg"))
+        ph.init("/home/pi/pitanq/test/data", "nn")
+        rc = w.prepare_action()
+        self.assertEqual(rc, True, "Seg Walk prepare failed")
+        ppath = w.last_p_path
+        print("seg walk outpath", ppath)
+        pic = w.get_action_pic()
+        self.assertEqual(pic is not None, True, "Action pic for seg walk is none")
+
+
+
+    def test_cvRoad(self):
+        rmask = RoadMask.createCvRoadMask()
+        path = "test/data/road.jpg"
+        gray_path = "test/data/road-g.jpg"
+        rmask.prepare(path)
+        rmask.calibrate()
+        mask = rmask.handle_pic(path, gray_path)
+        self.assertEqual(mask is not None, True, "CvRoadMask prepare failed")
+
+
+    def test_segRoad(self):
+        rmask = RoadMask.createSegRoadMask()
+        rc = rmask.init()
+        self.assertEqual(rc, True, "SegRoadMask segmentation NN is not loaded")
+
+        path = "test/data/road.jpg"
+        gray_path = "test/data/road-sg.jpg"
+        mask = rmask.handle_pic(path, gray_path)
+        self.assertEqual(mask is not None, True, "SegRoadMask prepare failed")
+
+    def test_predictRoadCv(self):
+        rc = RoadClass.RoadClass("cv")
+        f_path = "test/data/road.jpg"    
+        g_path = "test/data/road_wmask.jpg"    
+        rc.prepare(f_path)
+        c = rc.classify(f_path, g_path)
+        self.assertEqual(c == 0, True, "Incorrect prediction by CV")
+
+    def test_predictRoadSeg(self):
+        rc = RoadClass.RoadClass("seg")
+        f_path = "test/data/road.jpg"    
+        g_path = "test/data/road_wmask.jpg"    
+        rc.prepare(f_path)
+        c = rc.classify(f_path, g_path)
+        self.assertEqual(c == 0, True, "Incorrect prediction by CV")
+
+
         
 
 

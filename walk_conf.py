@@ -95,6 +95,16 @@ def get_white_percent(g):
 def write_word(img, word, clr):
     cv.putText(img, word,(20,30), cv.FONT_HERSHEY_SIMPLEX, 1, clr, 2, cv.LINE_AA)
 
+def apply_word(cpath, outpath, word, clr):
+    cimg = cv.imread(cpath)
+    if cimg is None:
+        return False
+    write_word(cimg, word, clr)
+    if outpath is not None:
+        cv.imwrite(outpath, cimg)
+    return True
+
+
 def apply_mask_word(cpath, gpath, outpath, clr, word, clrw):
     img = apply_mask(cpath, gpath, None, clr)
     if img is None:

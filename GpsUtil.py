@@ -26,9 +26,6 @@ frg_pos = {"lat" :frg_lat, "lon" :frg_lon}
 
 
 
-
-
-
 def azimuth(pos1, pos2):
     lat1 = toRadians(pos1["lat"])
     lon1 = toRadians(pos1["lon"])
