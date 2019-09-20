@@ -41,6 +41,7 @@ import json
 import numpy as np
 import tensorflow as tf
 import PiConf
+import time
 
 model_dir = PiConf.IMAGENET_MODEL_DIR
 num_top_predictions = 10
@@ -138,8 +139,12 @@ def run_inference_on_image(image):
 
   # Creates graph from saved GraphDef.
   create_graph()
+  #tf.reset_default_graph()
+  #saver = tf.train.Saver()
+
 
   with tf.Session() as sess:
+    #saver.restore(sess, "/home/pi/inception/inception_v1.ckpt")
     # Some useful tensors:
     # 'softmax:0': A tensor containing the normalized prediction across
     #   1000 labels.
@@ -149,8 +154,12 @@ def run_inference_on_image(image):
     #   encoding of the image.
     # Runs the softmax tensor by feeding the image_data as input to the graph.
     softmax_tensor = sess.graph.get_tensor_by_name('softmax:0')
+
+    t0 = time.time()
     predictions = sess.run(softmax_tensor,
                            {'DecodeJpeg/contents:0': image_data})
+    t1 = time.time()
+    print("TF run took", (t1 - t0), "seconds")
     predictions = np.squeeze(predictions)
 
     # Creates node ID --> English string lookup.
@@ -172,7 +181,10 @@ def main(_):
 
   image = sys.argv[1]
   ret = run_inference_on_image(image)
-  print (ret)
+  if ret is not None:
+    for a in ret:
+        if a["score"] > 0.1:
+            print(a["item"], str(int(100. * a["score"])) + "%")
   if len(sys.argv) > 2:
     with open(sys.argv[2], 'w') as outfile:
         json.dump(ret, outfile)    

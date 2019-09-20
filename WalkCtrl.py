@@ -1,8 +1,12 @@
 import MotorCtrl
 import PhotoCtrl
 import PiConf
-
 import logging
+
+if __name__ == '__main__':
+    log_file = "/home/pi/test.log"
+    logging.basicConfig(filename=log_file,level=logging.DEBUG, format='%(asctime)s.%(msecs)03d %(threadName)s %(levelname)-8s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+
 import time
 import numpy as np
 import traceback
@@ -10,9 +14,9 @@ import math
 from datetime import datetime
 import os
 import walk_conf as wconf
-from tf_walk import TFWalkClassifier
 import cv2 as cv
 import RoadClass
+
 
 MAX_STEP_ATTEMPT = 2
 
@@ -30,7 +34,7 @@ class PreWalkCtrl:
 
     def __init__(self, photo, rclass):
         self.photo_ctrl = photo
-        self.rclass = rclass if rclass is not None else RoadClass.RoadClass()
+        self.rclass = rclass if rclass is not None else RoadClass.RoadClass(PiConf.ROAD_IMPL)
 
 
     def get_photo(self):
@@ -82,7 +86,6 @@ class PreWalkCtrl:
         return rc
 
 
-
     def prepare_action(self):
         logging.debug("Prepare walk")
         a = self.get_action()
@@ -104,7 +107,7 @@ class PreWalkCtrl:
         self.last_phid = phid
         self.rclass.prepare(fpath)
         g_path = self.get_mask_path(phid)
-        print("Generated gpath", g_path, phid)
+        logging.debug(("Getting action", fpath, g_path, phid))
         rc = self.rclass.classify(fpath, g_path)
         if rc is not None:
             self.last_g_path = g_path
@@ -133,7 +136,7 @@ class WalkCtrl(PreWalkCtrl):
 
     def next(self):
         self.iter_n += 1
-        return self.iter_n < self.max_iter
+        return self.iter_n <= self.max_iter
 
 
     def get_id(self):
@@ -162,12 +165,14 @@ class WalkCtrl(PreWalkCtrl):
     def follow_step(self, i):
         logging.debug(("Follow walk step", i))
         a = self.get_action()
-
+        logging.debug(("Walking action", a))
 
         if a is None:
             logging.debug(("No action from pic", self.last_s_path, "last action", self.last_action, "attempt", self.step_attempt))
             self.last_p_path = None
-            return False
+            #return False
+            # Make right
+            a = 1
 
     
         self.draw_action_pic(a)
@@ -198,20 +203,14 @@ def createWalkCtrl(motor_ctrl, photo_ctrl):
             
 
 if __name__ == '__main__':
-
-    log_file = "/home/pi/test.log"
-    logging.basicConfig(filename=log_file,level=logging.DEBUG, format='%(asctime)s.%(msecs)03d %(threadName)s %(levelname)-8s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-
-
     motor_ctrl = MotorCtrl.createMotorCtrl()
     photo_ctrl = PhotoCtrl.createPhotoCtrl()
 
     f = WalkCtrl(motor_ctrl, photo_ctrl)
-    #f.avg = 150
-    s_path = "photos/nn-s.jpg"    
-    f.last_s_path = s_path
 
-    img = cv.imread(s_path)
-    g_path = "test/data/g_nn.jpg"    
-    a = f.handle_small(img, g_path)
-    print ("Predict", a)
+    f.prepare_action()
+    logging.debug("Prepared----------------")
+
+    f.max_iter = 5
+    f.follow()
+

@@ -3,8 +3,10 @@ import PiConf
 import PhotoCtrl
 import logging
 import segment
+import segment_ncs
 import cv2
 import os.path
+import sys
 
 class RoadMask:
 
@@ -81,6 +83,12 @@ class CvRoadMask(RoadMask):
             self.calibrate()
         return self._handle_pic(gray_path)
 
+    def check_white(self, name, pic):
+        wp = wconf.get_white_percent(gray)
+        logging.debug(("White balance", name, wp, wconf.white_threshold))
+        return wp >= wconf.white_threshold
+
+
     def _handle_pic(self, gray_path):
         avg = self.avg
         logging.debug(("Use prepared avg", avg))
@@ -90,10 +98,10 @@ class CvRoadMask(RoadMask):
         blur = wconf.gray_blur
 
         gray = wconf.filter_gray(self.pic, gray_EPS, avg, rgb_EPS, blur, gray_path)
+        logging.debug(("Saved walk gray photo", gray_path, "avg", avg))
         wp = wconf.get_white_percent(gray)
-        logging.debug(("Saved walk gray photo", gray_path, "avg", avg, "white", wp))
-        if wp < wconf.white_threshold:
-            logging.debug(("Gray image is all black", wp, avg))
+        if not self.check_white(gray, gray_path):
+            logging.debug("Gray image is all black")
             return None
         self.out_path = self.gen_out_path(self.pic_path)
         wconf.apply_mask(self.small_path, gray_path, self.out_path, (0, 0, 255))
@@ -133,11 +141,48 @@ class SegRoadMask(RoadMask):
     def get_out_path(self):
         return self.out_path
 
+class SegNcsRoadMask(RoadMask):
+
+    net = None
+    model = None
+
+    def init(self):
+        self.model, self.net = segment_ncs.load_segment_model()
+        return self.net is not None
+
+    def gen_out_path(self, fpath):
+        path, file = os.path.split(fpath)
+        print(path, file)
+        smfile = "seg-out-ncs-" + file
+        return os.path.join(path, smfile)
+
+
+    def handle_pic(self, fpath, gray_path):
+        out, mask = segment_ncs.segment_image(fpath, self.model, self.net)
+        cv2.imwrite(out_path, out)
+
+        out_path = self.gen_out_path(fpath)
+        self.out_path = out_path
+
+        if not self.check_white(mask, gray_path):
+            return None
+        
+        cv2.imwrite(gray_path, mask)
+        return mask
+
+    def get_out_path(self):
+        return self.out_path
+
+
 
 
 
 def createSegRoadMask():
     return SegRoadMask()
+
+def createNcsRoadMask():
+    return SegNcsRoadMask()
+
 
 
 def testSegMask():
@@ -148,6 +193,15 @@ def testSegMask():
     gray_path = "test/data/road-sg.jpg"
     mask = rmask.handle_pic(path, gray_path)
 
+def testNcsMask():
+    rmask = createNcsRoadMask()
+    rmask.init()
+
+    path = "test/data/road.jpg"
+    gray_path = "test/data/road-sg.jpg"
+    mask = rmask.handle_pic(path, gray_path)
+
+
 def createCvRoadMask():
     return CvRoadMask()
 
@@ -157,7 +211,10 @@ def createRoadMask(name = None):
         return createCvRoadMask()
     if name == "seg":
         return createSegRoadMask()
-    return createSegRoadMask()
+    if name == "ncs":
+        return createNcsRoadMask()
+
+    return createNcsRoadMask()
 
 
 def testCvMask():
@@ -171,8 +228,10 @@ def testCvMask():
 
 if __name__ == '__main__':
 
-    log_file = "/home/pi/road_test.log"
-    logging.basicConfig(filename=log_file,level=logging.DEBUG, format='%(asctime)s.%(msecs)03d %(threadName)s %(levelname)-8s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+    #log_file = "/home/pi/road_test.log"
+    #logging.basicConfig(filename=log_file,level=logging.DEBUG, format='%(asctime)s.%(msecs)03d %(threadName)s %(levelname)-8s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
     #testCvMask()
-    testSegMask()
+    #testSegMask()
+    testNcsMask()
 

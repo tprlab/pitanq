@@ -1,19 +1,22 @@
-from flask import Flask, jsonify, request, send_from_directory
-import requests
 import logging
-import time
-import json
 import os
-
 import PiConf
-import AppCtrl
-
 
 if not os.path.isdir(PiConf.LOG_PATH):
     os.makedirs(PiConf.LOG_PATH)        
 
 log_file = PiConf.LOG_PATH + "/" + PiConf.LOG_FILE
 logging.basicConfig(filename=log_file,level=logging.DEBUG, format='%(asctime)s.%(msecs)03d %(threadName)s %(levelname)-8s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+
+
+from flask import Flask, jsonify, request, send_from_directory
+import requests
+import time
+import json
+
+import AppCtrl
+
+
 
 app = Flask(__name__)
 app_ctrl = AppCtrl.createCtrl()
@@ -89,6 +92,7 @@ def make_photo():
 
 @app.route('/photo/<phid>', methods=['GET'])
 def get_photo(phid):
+    #logging.debug("Begin: /get/photo")
     path, filename = app_ctrl.getPhotoPath(phid)
     if path is None:
         return "File not found", requests.codes.not_found
@@ -177,11 +181,13 @@ def stop_walk():
 
 @app.route('/walk/prepare', methods=['POST'])
 def prepare_walk():
+    #logging.debug("Begin: /walk/prepare")
     return jsonify(app_ctrl.prepare_walk()), requests.codes.ok
 
 
 @app.route('/walk/photo', methods=['GET'])
 def get_walk_photo():
+    #logging.debug("Begin: /walk/photo")
     return jsonify({"photo" : app_ctrl.get_walk_photo()}), requests.codes.ok
 
 
@@ -214,4 +220,4 @@ def stop_nav():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', use_reloader=False)

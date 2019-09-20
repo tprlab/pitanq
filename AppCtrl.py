@@ -6,7 +6,7 @@ import DnnDetectCtrl
 import DistCtrl
 import subprocess
 import PiConf
-import ClassifyCtrl
+#import ClassifyCtrl
 import MTFollowLineCtrl
 import MTWalkCtrl
 import GpsCtrl
@@ -34,7 +34,7 @@ class AppCtrl:
     nav_ctrl = None
     mock_gps_ctrl = None
 
-    mock_gps = False
+    mock_gps = True
 
     def __init__(self):
         self.motor_ctrl = MotorCtrl.createMotorCtrl()
@@ -43,16 +43,19 @@ class AppCtrl:
         self.dist_ctrl = DistCtrl.createDistCtrl()
         self.haar_ctrl = HaarDetectCtrl.createDetectCtrl()
         self.dnn_ctrl = DnnDetectCtrl.createDetectCtrl()
-        self.class_ctrl = ClassifyCtrl.createClassifyCtrl()
+        #self.class_ctrl = ClassifyCtrl.createClassifyCtrl()
         self.line_ctrl = MTFollowLineCtrl.MTFollowLineCtrl(self.motor_ctrl, self.photo_ctrl)
         self.walk_ctrl = MTWalkCtrl.createWalkCtrl(self.motor_ctrl, self.photo_ctrl)
-        self.gps_ctrl = GpsCtrl.createGpsCtrl()
         self.nav_ctrl = MTNavCtrl.createNavCtrl()
 
         self.nav_ctrl.init(self.gps_ctrl, self.motor_ctrl)
 
-        self.mock_gps_ctrl = GpsCtrl.createMockGpsCtrl()
-        self.mock_gps_ctrl.setPoint(GpsUtil.nyc_pos)
+        if self.mock_gps:
+            self.mock_gps_ctrl = GpsCtrl.createMockGpsCtrl()
+            self.mock_gps_ctrl.setPoint(GpsUtil.nyc_pos)
+            self.gps_ctrl = self.mock_gps_ctrl
+        else:
+            self.gps_ctrl = GpsCtrl.createGpsCtrl()
 
         if not os.path.exists(PiConf.TMP_DIR):
             os.makedirs(PiConf.TMP_DIR)
