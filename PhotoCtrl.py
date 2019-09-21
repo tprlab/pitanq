@@ -4,6 +4,7 @@ from datetime import datetime
 import logging
 import PiConf
 import subprocess
+import requests
 
 
 
@@ -43,8 +44,6 @@ class PhotoCtrl:
         return ret
 
 
-PHOTO_URL = "http://localhost:8080/?action=snapshot"
-
 
 class MJPhotoCtrl(PhotoCtrl):
     def make_photo(self):
@@ -52,7 +51,7 @@ class MJPhotoCtrl(PhotoCtrl):
         path = os.path.join(PiConf.PHOTO_PATH, phid + ".jpg")
         logging.debug("Making mjpeg photo %s" % path)
         try:
-            rc = subprocess.call(["wget", "-O", path, PHOTO_URL])
+            rc = subprocess.call(["wget", "-O", path, PiConf.PHOTO_URL])
             ok = rc == 0
             if ok == False:
                 return ok, None
@@ -71,11 +70,25 @@ class MJPhotoCtrl(PhotoCtrl):
         except Exception as e:
             logging.exception("Cannot make a photo")
             return False, e.message
+
+
+class VPhotoCtrl(PhotoCtrl):
+    def make_photo(self):
+        phid = self.get_file_id()
+        logging.debug("Making vphoto %s" % phid)
+        try:
+            resp = requests.get(PiConf.VPHOTO_URL + phid + ".jpg")
+            return resp.status_code == requests.codes.ok, phid
+        except Exception as e:
+            logging.exception("Cannot make a photo")
+            return False, e.message
+
        
 
 
 def createPhotoCtrl():
     return MJPhotoCtrl()
+    #return VPhotoCtrl()
 
 
 
