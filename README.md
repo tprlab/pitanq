@@ -7,6 +7,15 @@ Also it is a nice toy.
 
 ![PiTanq image](https://github.com/tprlab/tprlab.github.io/blob/master/img/other/pitanq.jpg)
 
+## Articles
+
+- [Raspberry Pi Photo-tank-robot](https://medium.com/@const.toporov/raspberry-pi-photo-tank-robot-cf5ca7288adf)
+- [Line following robot with OpenCV and contour-based approach](https://medium.com/@const.toporov/line-following-robot-with-opencv-and-contour-based-approach-417b90f2c298)
+- [Robot following a walkway with OpenCV and Tensorflow](https://towardsdatascience.com/robot-following-a-walkway-with-opencv-and-tensorflow-a631eb72cb8c)
+- [Raspberry Pi robot with GPS](https://medium.com/@const.toporov/raspberry-pi-robot-with-gps-d6f7a9bc10a6)
+- [Robot following a walkway using image segmentation](https://towardsdatascience.com/robot-following-a-walkway-using-image-segmentation-272bebd93a83)
+- [Robot-tank with Raspberry Pi and Intel Neural Computer Stick 2](https://towardsdatascience.com/robot-tank-with-raspberry-pi-and-intel-neural-computer-stick-2-77263ca7a1c7)
+
 ## Hardware
 PiTanq is based on an aluminum chassis (the motors are included).
 
